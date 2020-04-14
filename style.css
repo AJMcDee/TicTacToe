@@ -1,0 +1,15 @@
+#gameBoard {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    border: 3px solid black;
+    width: 500px;
+    height: 500px;
+}
+
+.gamesquare {
+    background-color: aquamarine;
+    border: 2px solid red;
+}
+
+
