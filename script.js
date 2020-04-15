@@ -85,26 +85,49 @@ const Player = (name, color, playerID) => {
 }
 
 // Player settings go here
-var playerSetUp = (function playerSetUp() {
-
+var playerSetUp = (function playerSetUp() { 
     const submitButtons = document.getElementsByClassName("submitplayerbutton")
 
         for (let i = 0; i < submitButtons.length; i++) {
             const playerID = `player${i+1}`
+            const currentDiv = document.getElementById(playerID)
             const button = document.getElementById(`submit${playerID}`)
             button.addEventListener("click", e => {
                 const playerName = document.getElementById(`${playerID}name`).value 
                 const playerColor = document.getElementById(`${playerID}shapecolor`).value
                 let newPlayer = Player(playerName, playerColor, playerID)
+                let playerSymbol
                 if (playerID === "player1") {
                     game.playerList[0] = newPlayer
+                    playerSymbol = "X"
                 } else {
                     game.playerList[1] = newPlayer
+                    playerSymbol = "O"
                 }
+
+                
+
+                const parentDiv = document.getElementById("playerInformation")
+                const newDiv = document.createElement('div')
+                newDiv.id = `${playerID}info`;
+                newDiv.innerHTML = `
+                <h4>${playerID.toUpperCase()}</h4>
+                Name: ${playerName}<br>
+                Symbol: <font color="${playerColor}">${playerSymbol}</font>
+                `
+
                 if (game.playerList[0].playerID === "player1" 
                 && game.playerList[1].playerID === "player2") {
                     game.startGameButton.style.visibility = "visible"
                 }
+
+                if (playerID === "player1") {
+                    parentDiv.insertAdjacentElement("afterbegin", newDiv)
+                } else {
+                    parentDiv.insertAdjacentElement("beforeend", newDiv)
+                }
+
+                currentDiv.style.display = "none";
             })
 
         }
