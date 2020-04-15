@@ -1,11 +1,18 @@
+// const testArray = [[1,2,3], [2,3,4]]
+// const firstTry = testArray[0][2];
+// const secondTry = testArray[0[2]];
+// console.log(firstTry)
+// console.log(secondTry)
+
+
 // Display and updating of boardstate go here
 const gameBoard = (() => {
-    let boardSetUp = ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"]
+    const boardSetUp = ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"]
     let boardState = ["","","","","","","","",""]
     const gameBoard = document.getElementById("gameBoard");
 
     boardSetUp.forEach(square => {
-        let newDiv = document.createElement("div")
+        const newDiv = document.createElement("div")
         newDiv.id = `${square}`
         newDiv.className = "gamesquare"
         newDiv.innerHTML = ""
@@ -21,6 +28,7 @@ const gameBoard = (() => {
 
     return {
         add,
+        boardSetUp,
         boardState,
         gameBoard
     }
@@ -36,8 +44,62 @@ const game = (() => {
     startGameButton.addEventListener("click", gameEnvironment)
     startGameButton.style.visibility = "hidden";
 
+    function getAllIndexes(arr, value) {
+        let indexes = []
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i].includes(value)) {
+                indexes.push(i)
+            }
+        }
+        return indexes
+    }
+
+    function generateWinConditions(boardSetup) {
+        let winConditionsFull = [];       
+
+        boardSetup.forEach(item => {
+            const firstChar = item[0];
+            const secondChar = item[1];
+            const firstCharIndexes = getAllIndexes(boardSetup, firstChar)
+            const secondCharIndexes = getAllIndexes(boardSetup, secondChar)
+            winConditionsFull.push(firstCharIndexes)
+            winConditionsFull.push(secondCharIndexes)
+        })
+        winConditionsFull.push([0,4,8])
+        winConditionsFull.push([2,4,6])
+        return winConditionsFull
+
+    }
+
+    
 
 
+    function checkWinCondition() {
+        const winCons = generateWinConditions(gameBoard.boardSetUp)
+        let gameOver = false;
+        winCons.forEach(item => {
+            let boxCount = 0;
+            item.forEach(index => {
+                if (gameBoard.boardState[index].length > 0 && 
+                    gameBoard.boardState[index] === gameBoard.boardState[item[0]]) {
+                    boxCount += 1;
+                }
+                if (boxCount === 3) {
+                    gameOver = true;
+                }
+            })
+        })
+
+        return gameOver
+
+
+    }
+
+    function displayEndGame() {
+        const endGameMessage = document.createElement("h1")
+        endGameMessage.textContent = "GAME OVER"
+        gameBoard.gameBoard.insertAdjacentElement("beforebegin", endGameMessage)
+    }
 
     function gameEnvironment() {
         let currentPlayer = "player1";
@@ -60,23 +122,25 @@ const game = (() => {
                         if (currentPlayer === "player1") {
                             gamesquares[i].style.color = game.playerList[0].color
                             gameBoard.add(squareID,"X")
+                            if (checkWinCondition()) {
+                                displayEndGame()
+                            }
                             currentPlayer = "player2"
         
                         } else {
                             gamesquares[i].style.color = game.playerList[1].color
                             gameBoard.add(squareID, "O");
+                            if (checkWinCondition()) {
+                                displayEndGame()
+                            }
                             currentPlayer = "player1"
                         }  
                     }
 
 
                 })
-            
-
         }
     }
-
-
 
     return {
        playerList,
@@ -96,7 +160,7 @@ const Player = (name, color, playerID) => {
 }
 
 // Player settings go here
-var playerSetUp = (function playerSetUp() { 
+const playerSetUp = (function playerSetUp() { 
     const submitButtons = document.getElementsByClassName("submitplayerbutton")
 
         for (let i = 0; i < submitButtons.length; i++) {
