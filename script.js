@@ -33,11 +33,11 @@ const game = (() => {
     const playerList = ["",""];
     const startGameButton = document.getElementById("startgame")
     const gamesquares = document.getElementsByClassName("gamesquare");
-    startGameButton.addEventListener("click", setGameEnvironment)
+    startGameButton.addEventListener("click", gameEnvironment)
     startGameButton.style.visibility = "hidden";
 
 
-    function setGameEnvironment() {
+    function gameEnvironment() {
         let currentPlayer = "player1";
         gameBoard.gameBoard.style.cursor = "pointer"
         for (let i = 0; i < gamesquares.length; i++) {
@@ -73,7 +73,7 @@ const game = (() => {
     }
 })()
 
-// Player information goes here
+// Player function factory
 const Player = (name, color, playerID) => {
 
     return {
