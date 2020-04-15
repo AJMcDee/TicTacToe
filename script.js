@@ -33,8 +33,8 @@ const game = (() => {
     const playerList = ["",""];
     const startGameButton = document.getElementById("startgame")
     const gamesquares = document.getElementsByClassName("gamesquare");
-
     startGameButton.addEventListener("click", setGameEnvironment)
+    startGameButton.style.visibility = "hidden";
 
 
     function setGameEnvironment() {
@@ -45,10 +45,10 @@ const game = (() => {
 
             const squareID = gamesquares[i].id;
             gamesquares[i].addEventListener("mouseenter", function () {
-                gamesquares[i].style.backgroundColor = "white";
+                gamesquares[i].style.backgroundColor = "#DAD2BC";
             })
             gamesquares[i].addEventListener("mouseleave", function () {
-                gamesquares[i].style.backgroundColor = "aquamarine";
+                gamesquares[i].style.backgroundColor = "white";
             })
             gamesquares[i].addEventListener("click", function () {
                 if (currentPlayer === "player1") {
@@ -68,7 +68,8 @@ const game = (() => {
 
 
     return {
-       playerList
+       playerList,
+       startGameButton
     }
 })()
 
@@ -99,6 +100,10 @@ var playerSetUp = (function playerSetUp() {
                     game.playerList[0] = newPlayer
                 } else {
                     game.playerList[1] = newPlayer
+                }
+                if (game.playerList[0].playerID === "player1" 
+                && game.playerList[1].playerID === "player2") {
+                    game.startGameButton.style.visibility = "visible"
                 }
             })
 
