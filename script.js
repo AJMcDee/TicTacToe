@@ -37,31 +37,42 @@ const game = (() => {
     startGameButton.style.visibility = "hidden";
 
 
+
+
     function gameEnvironment() {
         let currentPlayer = "player1";
         gameBoard.gameBoard.style.cursor = "pointer"
         for (let i = 0; i < gamesquares.length; i++) {
-            
 
             const squareID = gamesquares[i].id;
             gamesquares[i].addEventListener("mouseenter", function () {
-                gamesquares[i].style.backgroundColor = "#DAD2BC";
+                if (gamesquares[i].textContent.length < 1) {
+                    gamesquares[i].style.backgroundColor = "#DAD2BC";
+                }
             })
             gamesquares[i].addEventListener("mouseleave", function () {
                 gamesquares[i].style.backgroundColor = "white";
             })
-            gamesquares[i].addEventListener("click", function () {
-                if (currentPlayer === "player1") {
-                    gamesquares[i].style.color = game.playerList[0].color
-                    gameBoard.add(squareID,"X")
-                    currentPlayer = "player2"
 
-                } else {
-                    gamesquares[i].style.color = game.playerList[1].color
-                    gameBoard.add(squareID, "O");
-                    currentPlayer = "player1"
-                }  
-            })
+
+                gamesquares[i].addEventListener("click", function () {
+                    if (gamesquares[i].textContent.length < 1) {
+                        if (currentPlayer === "player1") {
+                            gamesquares[i].style.color = game.playerList[0].color
+                            gameBoard.add(squareID,"X")
+                            currentPlayer = "player2"
+        
+                        } else {
+                            gamesquares[i].style.color = game.playerList[1].color
+                            gameBoard.add(squareID, "O");
+                            currentPlayer = "player1"
+                        }  
+                    }
+
+
+                })
+            
+
         }
     }
 
