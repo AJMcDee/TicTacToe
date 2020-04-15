@@ -93,6 +93,7 @@ var playerSetUp = (function playerSetUp() {
             const currentDiv = document.getElementById(playerID)
             const button = document.getElementById(`submit${playerID}`)
             button.addEventListener("click", e => {
+
                 const playerName = document.getElementById(`${playerID}name`).value 
                 const playerColor = document.getElementById(`${playerID}shapecolor`).value
                 let newPlayer = Player(playerName, playerColor, playerID)
