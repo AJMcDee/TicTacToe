@@ -86,7 +86,6 @@ const Player = (name, color, playerID) => {
 // Player settings go here
 var playerSetUp = (function playerSetUp() {
 
-
     const submitButtons = document.getElementsByClassName("submitplayerbutton")
 
         for (let i = 0; i < submitButtons.length; i++) {
@@ -102,11 +101,6 @@ var playerSetUp = (function playerSetUp() {
                     game.playerList[1] = newPlayer
                 }
             })
-
-        }
-
-
-    return {
 
         }
 
