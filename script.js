@@ -11,13 +11,25 @@ const gameBoard = (() => {
     let boardState = ["","","","","","","","",""]
     const gameBoard = document.getElementById("gameBoard");
 
-    boardSetUp.forEach(square => {
+    function setBoard() {
+        boardSetUp.forEach(square => {
         const newDiv = document.createElement("div")
         newDiv.id = `${square}`
         newDiv.className = "gamesquare"
         newDiv.innerHTML = ""
         gameBoard.appendChild(newDiv)
-    });
+        });
+    }
+
+    function setBoardState() {
+        boardState.length = 0
+        for (let i = 0; i<9; i++) {
+            boardState.push("");
+        }
+    }
+
+    setBoard()
+    setBoardState()
 
     const add = (squareID, shape) => {
         const gameSquare = document.getElementById(squareID);
@@ -68,8 +80,51 @@ const gameBoard = (() => {
 
     const winCons = generateWinConditions(boardSetUp)
 
+    function disable() {
+        gameBoard.style.cssText = "cursor: default; pointer-events: none;"
+    }
+
+    function reset() {
+        const resetButton = document.createElement("button")
+        const endGameMessage = document.getElementById("endgamemessage")
+        const congratsMessage = document.getElementById("congratsmessage")
+
+        function removeAndReplacePlayerInfo() {
+            game.playerList.forEach(player => {
+                const currentDiv = document.getElementById(`${player.playerID}info`)
+                const formDiv = document.getElementById(`${player.playerID}`)
+                currentDiv.parentElement.removeChild(currentDiv);
+                formDiv.style.display = "inline";
+
+                const nameEntry = document.getElementById(`${player.playerID}name`)
+                nameEntry.value = ""
+
+                const colorEntry = document.getElementById(`${player.playerID}shapecolor`)
+                colorEntry.value = "#000000"
+            })
+        }
+
+
+        resetButton.id = "resetbutton";
+        resetButton.textContent = "New Game";
+        resetButton.addEventListener("click", function() {
+            gameBoard.textContent = "";
+            setBoard()
+            setBoardState()
+            removeAndReplacePlayerInfo()
+            gameBoard.style.pointerEvents = "auto";
+            endGameMessage.parentElement.removeChild(endGameMessage)
+            congratsMessage.parentElement.removeChild(congratsMessage)
+            resetButton.parentElement.removeChild(resetButton)
+        })
+        gameBoard.insertAdjacentElement("beforebegin", resetButton);
+
+    }
+
     return {
         add,
+        disable,
+        reset,
         boardSetUp,
         boardState,
         gameBoard,
@@ -103,9 +158,9 @@ const game = (() => {
                     boxLog.forEach(boxIndex => {
                         const divID = gameBoard.boardSetUp[boxIndex]
                         const currentDiv = document.getElementById(divID)
-                        currentDiv.style.backgroundColor = "red";
+                        currentDiv.style.backgroundColor = "green";
                         currentDiv.addEventListener("mouseleave", function () {
-                            currentDiv.style.backgroundColor = "red";
+                            currentDiv.style.backgroundColor = "green";
                         })
                     })
                 }
@@ -118,10 +173,11 @@ const game = (() => {
     function displayEndGame(winner) {
         const endGameMessage = document.createElement("h1")
         endGameMessage.textContent = "GAME OVER"
+        endGameMessage.id = "endgamemessage"
         const congratsMessage = document.createElement("h2")
+        congratsMessage.id = "congratsmessage"
         let winnerIndex
         for (let i = 0; i < game.playerList.length; i++) {
-            console.log(game.playerList[i].playerID)
             if (game.playerList[i].playerID === winner) {
                 winnerIndex = i
             }
@@ -130,9 +186,14 @@ const game = (() => {
 
         gameBoard.gameBoard.insertAdjacentElement("beforebegin", endGameMessage)
         gameBoard.gameBoard.insertAdjacentElement("beforebegin", congratsMessage)
+        gameBoard.disable()
+        gameBoard.reset()
+
+
     }
 
     function gameEnvironment() {
+        
         let currentPlayer = "player1";
         gameBoard.gameBoard.style.cursor = "pointer"
         for (let i = 0; i < gamesquares.length; i++) {
