@@ -91,26 +91,45 @@ const game = (() => {
         let gameOver = false;
         gameBoard.winCons.forEach(item => {
             let boxCount = 0;
+            let boxLog = [];
             item.forEach(index => {
                 if (gameBoard.boardState[index].length > 0 && 
                     gameBoard.boardState[index] === gameBoard.boardState[item[0]]) {
                     boxCount += 1;
+                    boxLog.push(index)
                 }
                 if (boxCount === 3) {
                     gameOver = true;
+                    boxLog.forEach(boxIndex => {
+                        const divID = gameBoard.boardSetUp[boxIndex]
+                        const currentDiv = document.getElementById(divID)
+                        currentDiv.style.backgroundColor = "red";
+                        currentDiv.addEventListener("mouseleave", function () {
+                            currentDiv.style.backgroundColor = "red";
+                        })
+                    })
                 }
             })
         })
 
         return gameOver
-
-
     }
 
-    function displayEndGame() {
+    function displayEndGame(winner) {
         const endGameMessage = document.createElement("h1")
         endGameMessage.textContent = "GAME OVER"
+        const congratsMessage = document.createElement("h2")
+        let winnerIndex
+        for (let i = 0; i < game.playerList.length; i++) {
+            console.log(game.playerList[i].playerID)
+            if (game.playerList[i].playerID === winner) {
+                winnerIndex = i
+            }
+        }
+        congratsMessage.textContent = `Congratulations ${game.playerList[winnerIndex].name}`
+
         gameBoard.gameBoard.insertAdjacentElement("beforebegin", endGameMessage)
+        gameBoard.gameBoard.insertAdjacentElement("beforebegin", congratsMessage)
     }
 
     function gameEnvironment() {
@@ -135,7 +154,7 @@ const game = (() => {
                             gamesquares[i].style.color = game.playerList[0].color
                             gameBoard.add(squareID,"X")
                             if (checkWinCondition()) {
-                                displayEndGame()
+                                displayEndGame("player1")
                             }
                             currentPlayer = "player2"
         
@@ -143,7 +162,7 @@ const game = (() => {
                             gamesquares[i].style.color = game.playerList[1].color
                             gameBoard.add(squareID, "O");
                             if (checkWinCondition()) {
-                                displayEndGame()
+                                displayEndGame("player2")
                             }
                             currentPlayer = "player1"
                         }  
