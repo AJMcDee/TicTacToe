@@ -26,24 +26,6 @@ const gameBoard = (() => {
         boardState[index] = shape;
     }
 
-    return {
-        add,
-        boardSetUp,
-        boardState,
-        gameBoard
-    }
-
-
-})()
-
-// Game event handlers go here
-const game = (() => {
-    const playerList = ["",""];
-    const startGameButton = document.getElementById("startgame")
-    const gamesquares = document.getElementsByClassName("gamesquare");
-    startGameButton.addEventListener("click", gameEnvironment)
-    startGameButton.style.visibility = "hidden";
-
     function getAllIndexes(arr, value) {
         let indexes = []
         for (let i = 0; i < arr.length; i++) {
@@ -67,17 +49,47 @@ const game = (() => {
         })
         winConditionsFull.push([0,4,8])
         winConditionsFull.push([2,4,6])
-        return winConditionsFull
 
+        //Convert to strings and back to allow for removal of duplicates
+        let winConditionsFullStrings = ["0,4,8","2,4,6"]
+        let finalWinCons = []
+        winConditionsFull.forEach(winCon => { 
+            let winConString = winCon.toString();
+            if (winConditionsFullStrings.includes(winConString) === false) {
+                winConditionsFullStrings.push(winConString)
+            }
+        })
+        winConditionsFullStrings.forEach(winCon => {
+            const newWinCon = winCon.split(",")
+            finalWinCons.push(newWinCon)
+        })
+        return finalWinCons
     }
 
-    
+    const winCons = generateWinConditions(boardSetUp)
 
+    return {
+        add,
+        boardSetUp,
+        boardState,
+        gameBoard,
+        winCons
+    }
+
+
+})()
+
+// Game event handlers go here
+const game = (() => {
+    const playerList = ["",""];
+    const startGameButton = document.getElementById("startgame")
+    const gamesquares = document.getElementsByClassName("gamesquare");
+    startGameButton.addEventListener("click", gameEnvironment)
+    startGameButton.style.visibility = "hidden";
 
     function checkWinCondition() {
-        const winCons = generateWinConditions(gameBoard.boardSetUp)
         let gameOver = false;
-        winCons.forEach(item => {
+        gameBoard.winCons.forEach(item => {
             let boxCount = 0;
             item.forEach(index => {
                 if (gameBoard.boardState[index].length > 0 && 
