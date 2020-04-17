@@ -155,7 +155,7 @@ const game = (() => {
         if (gameBoard.boardState.every(boxFilled)) {
             gameOver = true
             displayEndGame("none")
-            return
+            return gameOver
         }
 
 
@@ -186,7 +186,7 @@ const game = (() => {
             gameOver = true;
             gameOverBoxes()
             displayEndGame(currentPlayer)
-            return
+            return gameOver
         }
 
         })
@@ -194,14 +194,8 @@ const game = (() => {
     }
 
 
-    // Rules for the computer:
-    // - Middle square first
-    // - Then find 2 in a row of your own and complete it
-    // - Then find 2 in a row of the opponent and block it
-    // - Then find a box adjacent to an already-existing square of yours and fill it
-    // - Then find a box adjacent to the opponent and fill it
-    // - Then select a random box
     function computerPlay() {
+        let turnOver = false;
         for (let i = 0; i < gameBoard.winCons.length; i++) {
             const item = gameBoard.winCons[i]
 
@@ -210,47 +204,43 @@ const game = (() => {
 
             const winConBoxCount = () => {
 
-                item.forEach(index => {
+                for (let i = 0; i < item.length; i++) {
+                    let index = item[i]
                     boxCount = 0;
                     boxLog = []
                     let indexIndex = item.indexOf(index);
-                    ///Ensure that of the list of WinCons, 2 out of 3 match, and one is empty
-                    switch (indexIndex) {
-                        case 0:
-                            if (gameBoard.boardState[index].length > 0 
-                                && 
-                                (gameBoard.boardState[index] === gameBoard.boardState[item[1]] ||
-                                gameBoard.boardState[index] === gameBoard.boardState[item[2]]) 
-                                && 
-                                (gameBoard.boardState[item[1]].length < 1 ||
-                                gameBoard.boardState[item[2]].length < 1)) {
-                                boxCount += 2;
-                                boxLog.push(index) 
-                                }
-                        case 1:
-                            if (gameBoard.boardState[index].length > 0 
-                                && 
-                                (gameBoard.boardState[index] === gameBoard.boardState[item[0]] ||
-                                gameBoard.boardState[index] === gameBoard.boardState[item[2]]) 
-                                && 
-                                (gameBoard.boardState[item[0]].length < 1 ||
-                                gameBoard.boardState[item[2]].length < 1)) {
-                                boxCount += 2;
-                                boxLog.push(index) 
-                                }
-                        case 2:
-                            if (gameBoard.boardState[index].length > 0 
-                                && 
-                                (gameBoard.boardState[index] === gameBoard.boardState[item[0]] ||
-                                gameBoard.boardState[index] === gameBoard.boardState[item[1]]) 
-                                && 
-                                (gameBoard.boardState[item[0]].length < 1 ||
-                                gameBoard.boardState[item[1]].length < 1)) {
-                                boxCount += 2;
-                                boxLog.push(index) 
-                                }
+
+                    function pushCountAndLog(index, matchedBox) {
+                        boxCount += 2;
+                        boxLog.push(index, matchedBox) 
                     }
-                 })
+
+                    ///Ensure that of the list of WinCons, 2 out of 3 match, and one is empty
+                    function matchTwoBoxesOnly(index, indexIndex) {
+                        let matchedBox
+                        let indexPossibilities = ["0", "1", "2"]
+                        indexPossibilities.splice(indexIndex,1)
+
+                        if (gameBoard.boardState[index].length > 0 && 
+                            (gameBoard.boardState[item[indexPossibilities[0]]].length < 1 ||
+                            gameBoard.boardState[item[indexPossibilities[1]]].length < 1)) {
+                            if (gameBoard.boardState[index] === gameBoard.boardState[item[indexPossibilities[0]]]) {
+                                matchedBox = item[indexPossibilities[0]]
+                            } else if (gameBoard.boardState[index] === gameBoard.boardState[item[indexPossibilities[1]]]) {
+                                matchedBox = item[indexPossibilities[1]]
+                            } 
+                        } 
+                        return matchedBox
+                    }
+
+                    if (!matchTwoBoxesOnly(index,indexIndex)) {
+                        boxCount = 1
+                    } else {
+                        const matchedBox = matchTwoBoxesOnly(index,indexIndex)
+                        pushCountAndLog(index, matchedBox)
+                        break
+                    }
+                 }
                 return [boxCount, boxLog] 
             }
 
@@ -260,27 +250,33 @@ const game = (() => {
 
             if (gameBoard.boardState[4].length === 0) {
                 gameBoard.add(gameBoard.boardSetUp[4], "O")
+                turnOver = true;
                 break
             } else if (boxCount === 2) {
-                /// FIX THIS: ITEMS NOT POPPING
+                boxLog.sort();
                 const itemIndexLast = item.indexOf(boxLog[1]);
                 const itemIndexNext = item.indexOf(boxLog[0]);
-                item.splice(itemIndexLast,1)
-                item.splice(itemIndexNext,1)
-                gameBoard.add(gameBoard.boardSetUp[item[0]], "O")
+                let itemTempCopy = [...item];
+                itemTempCopy.splice(itemIndexLast,1)
+                itemTempCopy.splice(itemIndexNext,1)
+                gameBoard.add(gameBoard.boardSetUp[itemTempCopy[0]], "O")
+                turnOver = true;
                 break
             }
         }
-            let emptySquares = []
-            for (let i = 0; i < gameBoard.boardState.length; i++) {
-                if (gameBoard.boardState[i].length < 1) {
-                    emptySquares.push(i)
-                } 
-            }
-    
+
+            if (turnOver === false) {
+                let emptySquares = []
+                for (let i = 0; i < gameBoard.boardState.length; i++) {
+                    if (gameBoard.boardState[i].length < 1) {
+                        emptySquares.push(i)
+                    } 
+                }
+
             const randomSquare = Math.floor(Math.random() * emptySquares.length)
             const gameboardIndex = emptySquares[randomSquare]
             gameBoard.add(gameBoard.boardSetUp[gameboardIndex], "O")
+            }
         
 
             
@@ -351,19 +347,23 @@ const game = (() => {
                         if (currentPlayer === "player1") {
                             gamesquares[i].style.color = game.playerList[0].color
                             gameBoard.add(squareID,"X")
-                            checkWinCondition()
-                            togglePlayer()
+                            if (!checkWinCondition()) {
+                                togglePlayer()
+                            }
+                            
                             if (currentPlayer === "player3") {
                                 computerPlay()
-                                checkWinCondition()
-                                togglePlayer()
+                                if (!checkWinCondition()) {
+                                    togglePlayer()
+                                }
                             }
         
                         } else if (currentPlayer === "player2") {
                             gamesquares[i].style.color = game.playerList[1].color
                             gameBoard.add(squareID, "O");
-                            checkWinCondition()
-                            togglePlayer()
+                            if (!checkWinCondition()) {
+                                togglePlayer()
+                            }
                         } 
                     }
                 })
