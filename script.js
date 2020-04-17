@@ -183,10 +183,69 @@ const game = (() => {
         }
 
         })
-
-
-
         return gameOver
+    }
+
+
+    // Rules for the computer:
+    // - Middle square first
+    // - Then find 2 in a row of your own and complete it
+    // - Then find 2 in a row of the opponent and block it
+    // - Then find a box adjacent to an already-existing square of yours and fill it
+    // - Then find a box adjacent to the opponent and fill it
+    // - Then select a random box
+    function computerPlay() {
+        for (let i = 0; i < gameBoard.winCons.length; i++) {
+            const item = gameBoard.winCons[i]
+
+            let boxCount = 0;
+            let boxLog = [];
+
+            const winConBoxCount = () => {
+                item.forEach(index => {
+                    if (gameBoard.boardState[index].length > 0 && 
+                        (gameBoard.boardState[index] === gameBoard.boardState[item[0]] ||
+                            gameBoard.boardState[index] === gameBoard.boardState[item[1]] ||
+                            gameBoard.boardState[index] === gameBoard.boardState[item[2]])) {
+                        boxCount += 1;
+                        boxLog.push(index)
+                    }
+                 })
+                return [boxCount, boxLog] 
+            }
+
+            let result = winConBoxCount()
+            boxCount = result[0]
+            boxLog = result[1]
+
+            if (gameBoard.boardState[4].length === 0) {
+                gameBoard.add(gameBoard.boardSetUp[4], "O")
+                break
+            } else if (boxCount === 2) {
+                /// FIX THIS: ITEMS NOT POPPING
+                item.pop(boxLog[0])
+                item.pop(boxLog[1])
+                gameBoard.add(item[0], "O")
+                break
+            } else {
+                let emptySquares = []
+                for (let i = 0; i < emptySquares.length; i++) {
+                    if (gameBoard.gameState[i].length < 1) {
+                        emptySquares.push(i)
+                    } 
+                }
+
+                ///FIX THIS
+                const randomSquare = Math.floor(Math.random() * emptySquares.length)
+                gameBoard.add(gameBoard.boardSetUp[randomSquare], "O")
+                break
+            }
+
+
+
+
+        }
+
     }
 
     function displayEndGame(winner) {
@@ -217,8 +276,23 @@ const game = (() => {
     }
 
     let currentPlayer
+
+    function togglePlayer() {
+        if (currentPlayer === playerList[0].playerID) {
+            currentPlayer = playerList[1].playerID
+        } else {
+            currentPlayer = playerList[0].playerID
+        }
+    }
+
+
+
+
+
+
+
+
     function gameEnvironment() {
-        
         currentPlayer = "player1";
         gameBoard.gameBoard.style.cursor = "pointer"
         for (let i = 0; i < gamesquares.length; i++) {
@@ -240,23 +314,26 @@ const game = (() => {
                             gamesquares[i].style.color = game.playerList[0].color
                             gameBoard.add(squareID,"X")
                             checkWinCondition()
-                            currentPlayer = "player2"
+                            togglePlayer()
+                            if (currentPlayer === "player3") {
+                                computerPlay()
+                                togglePlayer()
+                            }
         
-                        } else {
+                        } else if (currentPlayer === "player2") {
                             gamesquares[i].style.color = game.playerList[1].color
                             gameBoard.add(squareID, "O");
                             checkWinCondition()
-                            currentPlayer = "player1"
-                        }  
+                            togglePlayer()
+                        } 
                     }
-
-
                 })
         }
 
     }
 
     return {
+        currentPlayer,
        playerList,
        startGameButton
     }
@@ -279,14 +356,26 @@ const playerSetUp = (function playerSetUp() {
 
         for (let i = 0; i < submitButtons.length; i++) {
             let playerID = `player${i+1}`
-            const currentDiv = document.getElementById(playerID)
+            
             const button = document.getElementById(`submit${playerID}`)
             button.addEventListener("click", e => {
 
-                
+                let playerName
+                let playerColor
+                let currentDiv
 
-                const playerName = document.getElementById(`${playerID}name`).value 
-                const playerColor = document.getElementById(`${playerID}shapecolor`).value
+                if (playerID === "player3") {
+                    playerName = "Computer"
+                    playerColor = "black"
+                    currentDiv = document.getElementById("player2")
+                } else {             
+                    playerName = document.getElementById(`${playerID}name`).value 
+                    playerColor = document.getElementById(`${playerID}shapecolor`).value
+                    currentDiv = document.getElementById(playerID)
+                }
+
+
+
                 let newPlayer = Player(playerName, playerColor, playerID)
                 let playerSymbol
                 if (playerID === "player1") {
@@ -309,7 +398,7 @@ const playerSetUp = (function playerSetUp() {
                 `
 
                 if (game.playerList[0].playerID === "player1" 
-                && game.playerList[1].playerID === "player2") {
+                && game.playerList[1].playerID) {
                     game.startGameButton.style.visibility = "visible"
                 }
 
