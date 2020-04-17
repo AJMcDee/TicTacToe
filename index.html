@@ -5,9 +5,9 @@
     </head>
     <body>
         <h1>Tic Tac Toe</h1>
-        <div id="gameBoard">
-        </div>
-        <button id="startgame">Start Game</button>
+        <div id="resultsdisplay"></div>
+        <div id="newgamebuttondisplay"></div>
+        <div id="startgamebuttondisplay"><button id="startgame">Start Game</button></div>
         <div id="playerInformation">
             <div id="player1" class="playerInfoClass">
                 <h4>Enter Player 1</h4>
@@ -24,6 +24,8 @@
                     <button id="submitplayer1" class="submitplayerbutton">Enter Game</button>
             </div>
             <div id="player2" class="playerInfoClass">
+                <button id="submitplayer3" class="submitplayerbutton">Play Against the Computer</button><br>
+                OR<br>
                 <h4>Enter Player 2</h4>
                 
                 <form id="player2entry" class="playerentryform">
@@ -37,9 +39,12 @@
                         </select>
                 </form>
                     <button id="submitplayer2" class="submitplayerbutton">Enter Game</button>
-                    or <button id="submitplayer3" class="submitplayerbutton">Play Against the Computer</button><br>
+
             </div>
         </div>
+        <div id="gameBoard">
+        </div>
+        
         <script src="script.js"></script>
     </body>
 </html>

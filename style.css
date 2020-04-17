@@ -8,10 +8,21 @@
 }
 
 .gamesquare {
+    display: flex;
     background-color: #F7E9CA;
     border: 2px solid black;
-    text-align: center;
-    font-size: 30px;
+    font-size: 60px;
+    justify-content: center;
+    align-items: center;
 }
+
+#playerInformation {
+    display: flex;
+    justify-content: space-between;
+    min-width: 500px;
+    width: 60%;
+
+}
+
 
 

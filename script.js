@@ -1,12 +1,9 @@
-// const testArray = [[1,2,3], [2,3,4]]
-// const firstTry = testArray[0][2];
-// const secondTry = testArray[0[2]];
-// console.log(firstTry)
-// console.log(secondTry)
 
 
-// Display and updating of boardstate go here
+// Setup, display and updating of game conditions go here
+
 const gameBoard = (() => {
+    // Defining the grid of the boxes
     const boardSetUp = ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"]
     let boardState = ["","","","","","","","",""]
     const gameBoard = document.getElementById("gameBoard");
@@ -18,18 +15,10 @@ const gameBoard = (() => {
         newDiv.className = "gamesquare"
         newDiv.innerHTML = ""
         gameBoard.appendChild(newDiv)
+        gameBoard.style.display = "none";
         });
     }
-
-    function setBoardState() {
-        boardState.length = 0
-        for (let i = 0; i<9; i++) {
-            boardState.push("");
-        }
-    }
-
     setBoard()
-    setBoardState()
 
     const add = (squareID, shape) => {
         const gameSquare = document.getElementById(squareID);
@@ -37,6 +26,86 @@ const gameBoard = (() => {
         const index = boardSetUp.indexOf(`${squareID}`)
         boardState[index] = shape;
     }
+
+    function disable() {
+        gameBoard.style.cssText = "cursor: default; pointer-events: none;"
+    }
+
+    function resetBoardState() {
+        boardState.length = 0
+        for (let i = 0; i<9; i++) {
+            boardState.push("");
+        }
+    }
+
+    //Reset game, player, and gameboard for new round
+    function reset() {
+        const resetButton = document.createElement("button")
+        const endGameMessage = document.getElementById("endgamemessage")
+        const congratsMessage = document.getElementById("congratsmessage")
+
+        function removeAndReplacePlayerInfo() {
+            game.playerList.forEach(player => {
+
+                const currentDiv = document.getElementById(`${player.playerID}info`)
+                currentDiv.parentElement.removeChild(currentDiv);
+               
+                if (player.playerID === "player3") {
+                    player.playerID = "player2"
+                }
+                const nameEntry = document.getElementById(`${player.playerID}name`)
+                nameEntry.value = ""
+
+                const formDiv = document.getElementById(`${player.playerID}`)
+                formDiv.style.display = "inline";
+
+                const colorEntry = document.getElementById(`${player.playerID}shapecolor`)
+                colorEntry.value = "#000000"
+
+
+            })
+            game.playerList[0] = ""
+            game.playerList[1] = ""
+        }
+
+        resetButton.id = "resetbutton";
+        resetButton.textContent = "New Game";
+        resetButton.addEventListener("click", function() {
+            gameBoard.textContent = "";
+            setBoard()
+            resetBoardState()
+
+            removeAndReplacePlayerInfo()
+            playerSetUp.allPlayerInfo.style.display = "flex"
+            gameBoard.style.pointerEvents = "auto";
+            endGameMessage.parentElement.removeChild(endGameMessage)
+            congratsMessage.parentElement.removeChild(congratsMessage)
+            resetButton.parentElement.removeChild(resetButton)
+        })
+
+        document.getElementById("newgamebuttondisplay").appendChild(resetButton);
+
+    }
+
+    return {
+        add,
+        disable,
+        reset,
+        boardSetUp,
+        boardState,
+        gameBoard,
+    }
+
+
+})()
+
+// Game event handlers go here
+const game = (() => {
+    const playerList = ["",""];
+    const startGameButton = document.getElementById("startgame")
+    const gamesquares = document.getElementsByClassName("gamesquare");
+    startGameButton.addEventListener("click", gameEnvironment)
+    startGameButton.style.visibility = "hidden";
 
     function getAllIndexes(arr, value) {
         let indexes = []
@@ -77,80 +146,11 @@ const gameBoard = (() => {
         })
         return finalWinCons
     }
-
-    const winCons = generateWinConditions(boardSetUp)
-
-    function disable() {
-        gameBoard.style.cssText = "cursor: default; pointer-events: none;"
-    }
-
-    function reset() {
-        const resetButton = document.createElement("button")
-        const endGameMessage = document.getElementById("endgamemessage")
-        const congratsMessage = document.getElementById("congratsmessage")
-
-        function removeAndReplacePlayerInfo() {
-            game.playerList.forEach(player => {
-
-                const currentDiv = document.getElementById(`${player.playerID}info`)
-                currentDiv.parentElement.removeChild(currentDiv);
-               
-                if (player.playerID === "player3") {
-                    player.playerID = "player2"
-                }
-                const nameEntry = document.getElementById(`${player.playerID}name`)
-                nameEntry.value = ""
-
-                const formDiv = document.getElementById(`${player.playerID}`)
-                formDiv.style.display = "inline";
-
-                const colorEntry = document.getElementById(`${player.playerID}shapecolor`)
-                colorEntry.value = "#000000"
-
-
-            })
-        }
-
-
-        resetButton.id = "resetbutton";
-        resetButton.textContent = "New Game";
-        resetButton.addEventListener("click", function() {
-            gameBoard.textContent = "";
-            setBoard()
-            setBoardState()
-            removeAndReplacePlayerInfo()
-            gameBoard.style.pointerEvents = "auto";
-            endGameMessage.parentElement.removeChild(endGameMessage)
-            congratsMessage.parentElement.removeChild(congratsMessage)
-            resetButton.parentElement.removeChild(resetButton)
-        })
-        gameBoard.insertAdjacentElement("beforebegin", resetButton);
-
-    }
-
-    return {
-        add,
-        disable,
-        reset,
-        boardSetUp,
-        boardState,
-        gameBoard,
-        winCons
-    }
-
-
-})()
-
-// Game event handlers go here
-const game = (() => {
-    const playerList = ["",""];
-    const startGameButton = document.getElementById("startgame")
-    const gamesquares = document.getElementsByClassName("gamesquare");
-    startGameButton.addEventListener("click", gameEnvironment)
-    startGameButton.style.visibility = "hidden";
+    const winCons = generateWinConditions(gameBoard.boardSetUp)
 
     function checkWinCondition() {
         let gameOver = false;
+        
         const boxFilled = (currentBox) => currentBox.length > 0;
         if (gameBoard.boardState.every(boxFilled)) {
             gameOver = true
@@ -158,8 +158,7 @@ const game = (() => {
             return gameOver
         }
 
-
-        gameBoard.winCons.forEach(item => {
+        winCons.forEach(item => {
             let boxCount = 0;
             let boxLog = [];
 
@@ -190,17 +189,28 @@ const game = (() => {
         }
 
         })
+        togglePlayer()
         return gameOver
     }
 
+    /// Computer has three priorities in this order: 
+    
+        // 1. Taking the centre square; 
+        // 2. Blocking the third square if two in any win condition are identical
+        // 3. Filling a random empty square
+
+        // To do this, I use a 'box count' to count how many boxes in any given win condition are already filled.
+        // This number is used to determine the next course of action, and a log is kept of the board indexes filled,
+        // which are in turn removed from a copy of the relevant win condition array, leaving the empty square.
 
     function computerPlay() {
         let turnOver = false;
-        for (let i = 0; i < gameBoard.winCons.length; i++) {
-            const item = gameBoard.winCons[i]
-
+        for (let i = 0; i < winCons.length; i++) {
+            
+            const item = winCons[i]
             let boxCount = 0;
             let boxLog = [];
+            
 
             const winConBoxCount = () => {
 
@@ -283,6 +293,8 @@ const game = (() => {
     }
 
     function displayEndGame(winner) {
+        playerSetUp.allPlayerInfo.style.display = "none"
+        startGameButton.style.visibility = "hidden"
         const endGameMessage = document.createElement("h1")
         endGameMessage.textContent = "GAME OVER"
         endGameMessage.id = "endgamemessage"
@@ -300,13 +312,11 @@ const game = (() => {
             }
             congratsMessage.textContent = `Congratulations ${game.playerList[winnerIndex].name}`
         }
-
-        gameBoard.gameBoard.insertAdjacentElement("beforebegin", endGameMessage)
-        gameBoard.gameBoard.insertAdjacentElement("beforebegin", congratsMessage)
+        const resultsDiv = document.getElementById("resultsdisplay")
+        resultsDiv.appendChild(endGameMessage)
+        resultsDiv.appendChild(congratsMessage)
         gameBoard.disable()
         gameBoard.reset()
-
-
     }
 
     let currentPlayer
@@ -319,16 +329,11 @@ const game = (() => {
         }
     }
 
-
-
-
-
-
-
-
     function gameEnvironment() {
         currentPlayer = "player1";
         gameBoard.gameBoard.style.cursor = "pointer"
+        gameBoard.gameBoard.style.display = "grid"
+        startGameButton.style.visibility = "hidden"
         for (let i = 0; i < gamesquares.length; i++) {
 
             const squareID = gamesquares[i].id;
@@ -341,56 +346,50 @@ const game = (() => {
                 gamesquares[i].style.backgroundColor = "#F7E9CA";
             })
 
-
                 gamesquares[i].addEventListener("click", function () {
                     if (gamesquares[i].textContent.length < 1) {
                         if (currentPlayer === "player1") {
                             gamesquares[i].style.color = game.playerList[0].color
                             gameBoard.add(squareID,"X")
-                            if (!checkWinCondition()) {
-                                togglePlayer()
-                            }
+                            checkWinCondition()
                             
                             if (currentPlayer === "player3") {
                                 computerPlay()
-                                if (!checkWinCondition()) {
-                                    togglePlayer()
-                                }
+                                checkWinCondition()
                             }
         
                         } else if (currentPlayer === "player2") {
                             gamesquares[i].style.color = game.playerList[1].color
                             gameBoard.add(squareID, "O");
-                            if (!checkWinCondition()) {
-                                togglePlayer()
+                            checkWinCondition()
                             }
                         } 
-                    }
                 })
         }
 
     }
 
     return {
-        currentPlayer,
        playerList,
        startGameButton
     }
 })()
 
 // Player function factory
-const Player = (name, color, playerID) => {
+const Player = (name, color, playerID, displayID) => {
 
     return {
         name,
         color,
-        playerID
+        playerID,
+        displayID
     }
 
 }
 
-// Player settings go here
+// Player entry and settings go here
 const playerSetUp = (function playerSetUp() { 
+    const allPlayerInfo = document.getElementById("playerInformation")
     const submitButtons = document.getElementsByClassName("submitplayerbutton")
 
         for (let i = 0; i < submitButtons.length; i++) {
@@ -402,15 +401,18 @@ const playerSetUp = (function playerSetUp() {
                 let playerName
                 let playerColor
                 let currentDiv
+                let displayID
 
                 if (playerID === "player3") {
-                    playerName = "Computer"
+                    playerName = "Commander Data"
                     playerColor = "black"
                     currentDiv = document.getElementById("player2")
+                    displayID = "Computer"
                 } else {             
                     playerName = document.getElementById(`${playerID}name`).value 
                     playerColor = document.getElementById(`${playerID}shapecolor`).value
                     currentDiv = document.getElementById(playerID)
+                    displayID = `Player ${i+1}`
                 }
 
 
@@ -431,7 +433,7 @@ const playerSetUp = (function playerSetUp() {
                 const newDiv = document.createElement('div')
                 newDiv.id = `${playerID}info`;
                 newDiv.innerHTML = `
-                <h4>${playerID.toUpperCase()}</h4>
+                <h4>${displayID}</h4>
                 ${playerName}<br>
                 <font color="${playerColor}">${playerSymbol}</font>
                 `
@@ -451,6 +453,8 @@ const playerSetUp = (function playerSetUp() {
             })
 
         }
-
+    return {
+        allPlayerInfo
+    }
 })()
 
