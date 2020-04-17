@@ -91,16 +91,23 @@ const gameBoard = (() => {
 
         function removeAndReplacePlayerInfo() {
             game.playerList.forEach(player => {
-                const currentDiv = document.getElementById(`${player.playerID}info`)
-                const formDiv = document.getElementById(`${player.playerID}`)
-                currentDiv.parentElement.removeChild(currentDiv);
-                formDiv.style.display = "inline";
 
+                const currentDiv = document.getElementById(`${player.playerID}info`)
+                currentDiv.parentElement.removeChild(currentDiv);
+               
+                if (player.playerID === "player3") {
+                    player.playerID = "player2"
+                }
                 const nameEntry = document.getElementById(`${player.playerID}name`)
                 nameEntry.value = ""
 
+                const formDiv = document.getElementById(`${player.playerID}`)
+                formDiv.style.display = "inline";
+
                 const colorEntry = document.getElementById(`${player.playerID}shapecolor`)
                 colorEntry.value = "#000000"
+
+
             })
         }
 
@@ -203,10 +210,15 @@ const game = (() => {
 
             const winConBoxCount = () => {
                 item.forEach(index => {
-                    if (gameBoard.boardState[index].length > 0 && 
+                    if (gameBoard.boardState[index].length > 0 
+                        && 
                         (gameBoard.boardState[index] === gameBoard.boardState[item[0]] ||
                             gameBoard.boardState[index] === gameBoard.boardState[item[1]] ||
-                            gameBoard.boardState[index] === gameBoard.boardState[item[2]])) {
+                            gameBoard.boardState[index] === gameBoard.boardState[item[2]]) 
+                        && 
+                        (gameBoard.boardState[item[0]].length < 1 ||
+                            gameBoard.boardState[item[0]].length < 1 ||
+                            gameBoard.boardState[item[0]].length < 1)) {
                         boxCount += 1;
                         boxLog.push(index)
                     }
@@ -223,29 +235,26 @@ const game = (() => {
                 break
             } else if (boxCount === 2) {
                 /// FIX THIS: ITEMS NOT POPPING
-                item.pop(boxLog[0])
-                item.pop(boxLog[1])
-                gameBoard.add(item[0], "O")
-                break
-            } else {
-                let emptySquares = []
-                for (let i = 0; i < emptySquares.length; i++) {
-                    if (gameBoard.gameState[i].length < 1) {
-                        emptySquares.push(i)
-                    } 
-                }
-
-                ///FIX THIS
-                const randomSquare = Math.floor(Math.random() * emptySquares.length)
-                gameBoard.add(gameBoard.boardSetUp[randomSquare], "O")
+                item.splice(boxLog[1],1)
+                item.splice(boxLog[0],1)
+                gameBoard.add(gameBoard.boardSetUp[item[0]], "O")
                 break
             }
 
-
-
-
+            let emptySquares = []
+            for (let i = 0; i < gameBoard.boardState.length; i++) {
+                if (gameBoard.boardState[i].length < 1) {
+                    emptySquares.push(i)
+                } 
+            }
+    
+            const randomSquare = Math.floor(Math.random() * emptySquares.length)
+            const gameboardIndex = emptySquares[randomSquare]
+            gameBoard.add(gameBoard.boardSetUp[gameboardIndex], "O")
+            break
         }
 
+            
     }
 
     function displayEndGame(winner) {
@@ -317,6 +326,7 @@ const game = (() => {
                             togglePlayer()
                             if (currentPlayer === "player3") {
                                 computerPlay()
+                                checkWinCondition()
                                 togglePlayer()
                             }
         
