@@ -209,18 +209,46 @@ const game = (() => {
             let boxLog = [];
 
             const winConBoxCount = () => {
+
                 item.forEach(index => {
-                    if (gameBoard.boardState[index].length > 0 
-                        && 
-                        (gameBoard.boardState[index] === gameBoard.boardState[item[0]] ||
-                            gameBoard.boardState[index] === gameBoard.boardState[item[1]] ||
-                            gameBoard.boardState[index] === gameBoard.boardState[item[2]]) 
-                        && 
-                        (gameBoard.boardState[item[0]].length < 1 ||
-                            gameBoard.boardState[item[0]].length < 1 ||
-                            gameBoard.boardState[item[0]].length < 1)) {
-                        boxCount += 1;
-                        boxLog.push(index)
+                    boxCount = 0;
+                    boxLog = []
+                    let indexIndex = item.indexOf(index);
+                    ///Ensure that of the list of WinCons, 2 out of 3 match, and one is empty
+                    switch (indexIndex) {
+                        case 0:
+                            if (gameBoard.boardState[index].length > 0 
+                                && 
+                                (gameBoard.boardState[index] === gameBoard.boardState[item[1]] ||
+                                gameBoard.boardState[index] === gameBoard.boardState[item[2]]) 
+                                && 
+                                (gameBoard.boardState[item[1]].length < 1 ||
+                                gameBoard.boardState[item[2]].length < 1)) {
+                                boxCount += 2;
+                                boxLog.push(index) 
+                                }
+                        case 1:
+                            if (gameBoard.boardState[index].length > 0 
+                                && 
+                                (gameBoard.boardState[index] === gameBoard.boardState[item[0]] ||
+                                gameBoard.boardState[index] === gameBoard.boardState[item[2]]) 
+                                && 
+                                (gameBoard.boardState[item[0]].length < 1 ||
+                                gameBoard.boardState[item[2]].length < 1)) {
+                                boxCount += 2;
+                                boxLog.push(index) 
+                                }
+                        case 2:
+                            if (gameBoard.boardState[index].length > 0 
+                                && 
+                                (gameBoard.boardState[index] === gameBoard.boardState[item[0]] ||
+                                gameBoard.boardState[index] === gameBoard.boardState[item[1]]) 
+                                && 
+                                (gameBoard.boardState[item[0]].length < 1 ||
+                                gameBoard.boardState[item[1]].length < 1)) {
+                                boxCount += 2;
+                                boxLog.push(index) 
+                                }
                     }
                  })
                 return [boxCount, boxLog] 
@@ -235,12 +263,14 @@ const game = (() => {
                 break
             } else if (boxCount === 2) {
                 /// FIX THIS: ITEMS NOT POPPING
-                item.splice(boxLog[1],1)
-                item.splice(boxLog[0],1)
+                const itemIndexLast = item.indexOf(boxLog[1]);
+                const itemIndexNext = item.indexOf(boxLog[0]);
+                item.splice(itemIndexLast,1)
+                item.splice(itemIndexNext,1)
                 gameBoard.add(gameBoard.boardSetUp[item[0]], "O")
                 break
             }
-
+        }
             let emptySquares = []
             for (let i = 0; i < gameBoard.boardState.length; i++) {
                 if (gameBoard.boardState[i].length < 1) {
@@ -251,8 +281,7 @@ const game = (() => {
             const randomSquare = Math.floor(Math.random() * emptySquares.length)
             const gameboardIndex = emptySquares[randomSquare]
             gameBoard.add(gameBoard.boardSetUp[gameboardIndex], "O")
-            break
-        }
+        
 
             
     }
