@@ -13,17 +13,32 @@
                 <h4>Enter Player 1</h4>
                 <form id="player1entry" class="playerentryform">
                     Name: <input id="player1name" type="text"><br>
-                    Colour: <input id="player1shapecolor" type="color">
+                    Colour: <select id="player1shapecolor">
+                        <option value="#000000">Black</option>
+                        <option value="#004777">Blue</option>
+                        <option value="#844C6E">Purple</option>
+                        <option value="#E55812">Orange</option>
+                        <option value="#306B34">Green</option>
+                        </select>
                 </form>
                     <button id="submitplayer1" class="submitplayerbutton">Enter Game</button>
             </div>
             <div id="player2" class="playerInfoClass">
                 <h4>Enter Player 2</h4>
+                
                 <form id="player2entry" class="playerentryform">
                     Name: <input id="player2name" type="text"><br>
-                    Colour: <input id="player2shapecolor" type="color">
+                    Colour: <select id="player2shapecolor">
+                        <option value="#000000">Black</option>
+                        <option value="#004777">Blue</option>
+                        <option value="#844C6E">Purple</option>
+                        <option value="#E55812">Orange</option>
+                        <option value="#306B34">Green</option>
+                        </select>
                 </form>
                     <button id="submitplayer2" class="submitplayerbutton">Enter Game</button>
+                    <br><br>
+                    or <button id="submitplayer3" class="submitplayerbutton">Play Against the Computer</button><br>
             </div>
         </div>
         <script src="script.js"></script>

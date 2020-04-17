@@ -144,28 +144,47 @@ const game = (() => {
 
     function checkWinCondition() {
         let gameOver = false;
+        const boxFilled = (currentBox) => currentBox.length > 0;
+        if (gameBoard.boardState.every(boxFilled)) {
+            gameOver = true
+            displayEndGame("none")
+            return
+        }
+
+
         gameBoard.winCons.forEach(item => {
             let boxCount = 0;
             let boxLog = [];
+
+            const gameOverBoxes = () => {
+                boxLog.forEach(boxIndex => {
+                    const divID = gameBoard.boardSetUp[boxIndex]
+                    const currentDiv = document.getElementById(divID)
+                    currentDiv.style.backgroundColor = "green";
+                    currentDiv.addEventListener("mouseleave", function () {
+                        currentDiv.style.backgroundColor = "green";
+                    })
+                })
+            }
+
             item.forEach(index => {
                 if (gameBoard.boardState[index].length > 0 && 
                     gameBoard.boardState[index] === gameBoard.boardState[item[0]]) {
                     boxCount += 1;
                     boxLog.push(index)
                 }
-                if (boxCount === 3) {
-                    gameOver = true;
-                    boxLog.forEach(boxIndex => {
-                        const divID = gameBoard.boardSetUp[boxIndex]
-                        const currentDiv = document.getElementById(divID)
-                        currentDiv.style.backgroundColor = "green";
-                        currentDiv.addEventListener("mouseleave", function () {
-                            currentDiv.style.backgroundColor = "green";
-                        })
-                    })
-                }
             })
+
+        if (boxCount === 3) {
+            gameOver = true;
+            gameOverBoxes()
+            displayEndGame(currentPlayer)
+            return
+        }
+
         })
+
+
 
         return gameOver
     }
@@ -176,13 +195,18 @@ const game = (() => {
         endGameMessage.id = "endgamemessage"
         const congratsMessage = document.createElement("h2")
         congratsMessage.id = "congratsmessage"
-        let winnerIndex
-        for (let i = 0; i < game.playerList.length; i++) {
-            if (game.playerList[i].playerID === winner) {
-                winnerIndex = i
+
+        if (winner === "none") {
+            congratsMessage.textContent = `It was a tie!`
+        } else {
+            let winnerIndex
+            for (let i = 0; i < game.playerList.length; i++) {
+                if (game.playerList[i].playerID === winner) {
+                    winnerIndex = i
+                }
             }
+            congratsMessage.textContent = `Congratulations ${game.playerList[winnerIndex].name}`
         }
-        congratsMessage.textContent = `Congratulations ${game.playerList[winnerIndex].name}`
 
         gameBoard.gameBoard.insertAdjacentElement("beforebegin", endGameMessage)
         gameBoard.gameBoard.insertAdjacentElement("beforebegin", congratsMessage)
@@ -192,9 +216,10 @@ const game = (() => {
 
     }
 
+    let currentPlayer
     function gameEnvironment() {
         
-        let currentPlayer = "player1";
+        currentPlayer = "player1";
         gameBoard.gameBoard.style.cursor = "pointer"
         for (let i = 0; i < gamesquares.length; i++) {
 
@@ -205,7 +230,7 @@ const game = (() => {
                 }
             })
             gamesquares[i].addEventListener("mouseleave", function () {
-                gamesquares[i].style.backgroundColor = "white";
+                gamesquares[i].style.backgroundColor = "#F7E9CA";
             })
 
 
@@ -214,17 +239,13 @@ const game = (() => {
                         if (currentPlayer === "player1") {
                             gamesquares[i].style.color = game.playerList[0].color
                             gameBoard.add(squareID,"X")
-                            if (checkWinCondition()) {
-                                displayEndGame("player1")
-                            }
+                            checkWinCondition()
                             currentPlayer = "player2"
         
                         } else {
                             gamesquares[i].style.color = game.playerList[1].color
                             gameBoard.add(squareID, "O");
-                            if (checkWinCondition()) {
-                                displayEndGame("player2")
-                            }
+                            checkWinCondition()
                             currentPlayer = "player1"
                         }  
                     }
@@ -232,6 +253,7 @@ const game = (() => {
 
                 })
         }
+
     }
 
     return {
@@ -256,10 +278,12 @@ const playerSetUp = (function playerSetUp() {
     const submitButtons = document.getElementsByClassName("submitplayerbutton")
 
         for (let i = 0; i < submitButtons.length; i++) {
-            const playerID = `player${i+1}`
+            let playerID = `player${i+1}`
             const currentDiv = document.getElementById(playerID)
             const button = document.getElementById(`submit${playerID}`)
             button.addEventListener("click", e => {
+
+                
 
                 const playerName = document.getElementById(`${playerID}name`).value 
                 const playerColor = document.getElementById(`${playerID}shapecolor`).value
@@ -280,8 +304,8 @@ const playerSetUp = (function playerSetUp() {
                 newDiv.id = `${playerID}info`;
                 newDiv.innerHTML = `
                 <h4>${playerID.toUpperCase()}</h4>
-                Name: ${playerName}<br>
-                Symbol: <font color="${playerColor}">${playerSymbol}</font>
+                ${playerName}<br>
+                <font color="${playerColor}">${playerSymbol}</font>
                 `
 
                 if (game.playerList[0].playerID === "player1" 
