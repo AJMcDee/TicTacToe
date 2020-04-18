@@ -105,7 +105,7 @@ const game = (() => {
     const startGameButton = document.getElementById("startgame")
     const gamesquares = document.getElementsByClassName("gamesquare");
     startGameButton.addEventListener("click", gameEnvironment)
-    startGameButton.style.visibility = "hidden";
+    startGameButton.style.display = "none";
 
     function getAllIndexes(arr, value) {
         let indexes = []
@@ -151,12 +151,7 @@ const game = (() => {
     function checkWinCondition() {
         let gameOver = false;
         
-        const boxFilled = (currentBox) => currentBox.length > 0;
-        if (gameBoard.boardState.every(boxFilled)) {
-            gameOver = true
-            displayEndGame("none")
-            return gameOver
-        }
+
 
         winCons.forEach(item => {
             let boxCount = 0;
@@ -166,9 +161,9 @@ const game = (() => {
                 boxLog.forEach(boxIndex => {
                     const divID = gameBoard.boardSetUp[boxIndex]
                     const currentDiv = document.getElementById(divID)
-                    currentDiv.style.backgroundColor = "green";
+                    currentDiv.style.backgroundColor = "#C0F7CB";
                     currentDiv.addEventListener("mouseleave", function () {
-                        currentDiv.style.backgroundColor = "green";
+                        currentDiv.style.backgroundColor = "#C0F7CB";
                     })
                 })
             }
@@ -187,8 +182,16 @@ const game = (() => {
             displayEndGame(currentPlayer)
             return gameOver
         }
+    
 
         })
+
+        const boxFilled = (currentBox) => currentBox.length > 0;
+        if (gameBoard.boardState.every(boxFilled)) {
+            gameOver = true
+            displayEndGame("none")
+            return gameOver
+        }
         if (gameOver === false) {togglePlayer()}
         return gameOver
     }
@@ -294,7 +297,7 @@ const game = (() => {
 
     function displayEndGame(winner) {
         playerSetUp.allPlayerInfo.style.display = "none"
-        startGameButton.style.visibility = "hidden"
+        startGameButton.style.display = "none"
         const endGameMessage = document.createElement("h1")
         endGameMessage.textContent = "GAME OVER"
         endGameMessage.id = "endgamemessage"
@@ -333,7 +336,7 @@ const game = (() => {
         currentPlayer = "player1";
         gameBoard.gameBoard.style.cursor = "pointer"
         gameBoard.gameBoard.style.display = "grid"
-        startGameButton.style.visibility = "hidden"
+        startGameButton.style.display = "none"
         for (let i = 0; i < gamesquares.length; i++) {
 
             const squareID = gamesquares[i].id;
@@ -432,6 +435,7 @@ const playerSetUp = (function playerSetUp() {
                 const parentDiv = document.getElementById("playerInformation")
                 const newDiv = document.createElement('div')
                 newDiv.id = `${playerID}info`;
+                newDiv.className = "playerInfoClass";
                 newDiv.innerHTML = `
                 <h4>${displayID}</h4>
                 ${playerName}<br>
@@ -440,7 +444,7 @@ const playerSetUp = (function playerSetUp() {
 
                 if (game.playerList[0].playerID === "player1" 
                 && game.playerList[1].playerID) {
-                    game.startGameButton.style.visibility = "visible"
+                    game.startGameButton.style.display = "inherit"
                 }
 
                 if (playerID === "player1") {

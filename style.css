@@ -1,15 +1,27 @@
-#gameBoard {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    border: 3px solid black;
-    width: 50%;
-    max-width: 500px;
-}
 
 body {
     font-family: 'Josefin Sans', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
+
+#wrapper {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    padding: 0px 20px 0px 20px;
+    height: 80vh;
+}
+
+#gameBoard {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    width: 60vh;
+    max-width: 90vw;
+    height: 60vh;
+    max-height: 90vw;
+    margin-top: 20px;
+}
+
 
 
 .gamesquare {
@@ -19,18 +31,53 @@ body {
     font-size: 60px;
     justify-content: center;
     align-items: center;
-    height: 0;
-    padding-bottom: 100%;
 }
 
+.playerInfoClass {
+    border: 1px solid black;
+    margin: 10px;
+    padding: 14px;
+    width: 20vh;
+}
 
 #playerInformation {
     display: flex;
-    justify-content: space-between;
-    min-width: 500px;
-    width: 50%;
-
+    justify-content: center;
+    line-height: 35px;
 }
 
+#a1 {
+    border-left: 4px solid black;
+    border-top: 4px solid black;
+}
 
+#a2 {
+    border-top: 4px solid black;
+}
 
+#a3 {
+    border-top: 4px solid black;
+    border-right: 4px solid black;
+}
+
+#b1 {
+    border-left: 4px solid black;
+}
+
+#b3 {
+    border-right: 4px solid black;
+}
+
+#c1 {
+    border-bottom: 4px solid black;
+    border-left: 4px solid black;
+}
+
+#c2 {
+    border-bottom: 4px solid black;
+}
+
+#c3 {
+    border-right: 4px solid black;
+    border-bottom: 4px solid black;
+}

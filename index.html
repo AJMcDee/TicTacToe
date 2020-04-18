@@ -4,7 +4,7 @@
         <link rel="stylesheet" href="style.css">
         <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap" rel="stylesheet">
     </head>
-    <body><center>
+    <body><div id="wrapper"><center>
         <h1>Tic Tac Toe</h1>
         <div id="gameboardContainer"></div>
         <div id="resultsdisplay"></div>
@@ -27,8 +27,7 @@
                     <button id="submitplayer1" class="submitplayerbutton">Enter Game</button>
             </div>
             <div id="player2" class="playerInfoClass">
-                <p><button id="submitplayer3" class="submitplayerbutton">Play Against the Computer</button></p><br>
-                OR<br>
+                
                 <h4>Enter Player 2</h4>
                 
                 <form id="player2entry" class="playerentryform">
@@ -42,7 +41,12 @@
                         <option value="#306B34">Green</option>
                         </select>
                 </form>
-                    <button id="submitplayer2" class="submitplayerbutton">Enter Game</button>
+                    <p><button id="submitplayer2" class="submitplayerbutton">Enter Game</button></p>
+                    <br>
+                    <hr>
+                    <h4>OR</h4>
+                    <p><button id="submitplayer3" class="submitplayerbutton">Play Against the Computer</button></p><br>
+               
 
             </div>
         </div>
@@ -50,6 +54,6 @@
         </div>
         
         <script src="script.js"></script>
-    </center></body>
+    </center></div></body>
 </html>
 
