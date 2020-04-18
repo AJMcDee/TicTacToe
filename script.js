@@ -189,7 +189,7 @@ const game = (() => {
         }
 
         })
-        togglePlayer()
+        if (gameOver === false) {togglePlayer()}
         return gameOver
     }
 
