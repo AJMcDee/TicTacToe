@@ -187,7 +187,7 @@ const game = (() => {
         })
 
         const boxFilled = (currentBox) => currentBox.length > 0;
-        if (gameBoard.boardState.every(boxFilled)) {
+        if (gameOver === false && gameBoard.boardState.every(boxFilled)) {
             gameOver = true
             displayEndGame("none")
             return gameOver
