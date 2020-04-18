@@ -3,9 +3,14 @@
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     border: 3px solid black;
-    width: 500px;
-    height: 500px;
+    width: 50%;
+    max-width: 500px;
 }
+
+body {
+    font-family: 'Josefin Sans', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
 
 .gamesquare {
     display: flex;
@@ -14,13 +19,16 @@
     font-size: 60px;
     justify-content: center;
     align-items: center;
+    height: 0;
+    padding-bottom: 100%;
 }
+
 
 #playerInformation {
     display: flex;
     justify-content: space-between;
     min-width: 500px;
-    width: 60%;
+    width: 50%;
 
 }
 

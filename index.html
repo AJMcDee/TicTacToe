@@ -2,9 +2,11 @@
     <head>
         <title>Tic Tac Toe!</title>
         <link rel="stylesheet" href="style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap" rel="stylesheet">
     </head>
-    <body>
+    <body><center>
         <h1>Tic Tac Toe</h1>
+        <div id="gameboardContainer"></div>
         <div id="resultsdisplay"></div>
         <div id="newgamebuttondisplay"></div>
         <div id="startgamebuttondisplay"><button id="startgame">Start Game</button></div>
@@ -12,7 +14,8 @@
             <div id="player1" class="playerInfoClass">
                 <h4>Enter Player 1</h4>
                 <form id="player1entry" class="playerentryform">
-                    Name: <input id="player1name" type="text"><br>
+                    <p>Name:<br>
+                        <input id="player1name" type="text"></p>
                     Colour: <select id="player1shapecolor">
                         <option value="#000000">Black</option>
                         <option value="#004777">Blue</option>
@@ -24,12 +27,13 @@
                     <button id="submitplayer1" class="submitplayerbutton">Enter Game</button>
             </div>
             <div id="player2" class="playerInfoClass">
-                <button id="submitplayer3" class="submitplayerbutton">Play Against the Computer</button><br>
+                <p><button id="submitplayer3" class="submitplayerbutton">Play Against the Computer</button></p><br>
                 OR<br>
                 <h4>Enter Player 2</h4>
                 
                 <form id="player2entry" class="playerentryform">
-                    Name: <input id="player2name" type="text"><br>
+                    <p>Name:<br> 
+                        <input id="player2name" type="text"></p>
                     Colour: <select id="player2shapecolor">
                         <option value="#000000">Black</option>
                         <option value="#004777">Blue</option>
@@ -46,6 +50,6 @@
         </div>
         
         <script src="script.js"></script>
-    </body>
+    </center></body>
 </html>
 
