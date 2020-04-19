@@ -8,17 +8,16 @@ body {
     flex-direction: column;
     margin: 10px;
     padding: 0px 20px 0px 20px;
-    height: 80vh;
 }
 
 #gameBoard {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
-    width: 60vh;
-    max-width: 90vw;
-    height: 60vh;
-    max-height: 90vw;
+    width: 55vh;
+    max-width: 80vw;
+    height: 55vh;
+    max-height: 80vw;
     margin-top: 20px;
 }
 
@@ -43,7 +42,7 @@ body {
 #playerInformation {
     display: flex;
     justify-content: center;
-    line-height: 35px;
+    line-height: 1.5;
 }
 
 #a1 {
@@ -81,3 +80,57 @@ body {
     border-right: 4px solid black;
     border-bottom: 4px solid black;
 }
+
+
+/* Fade text on gameboard */
+
+.fade-in {
+    animation: fadeIn ease 500ms;
+    -webkit-animation: fadeIn ease 500ms;
+    -moz-animation: fadeIn ease 500ms;
+    -o-animation: fadeIn ease 500ms;
+    -ms-animation: fadeIn ease 500ms;
+  }
+  @keyframes fadeIn {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  
+  @-moz-keyframes fadeIn {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  
+  @-webkit-keyframes fadeIn {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  
+  @-o-keyframes fadeIn {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  
+  @-ms-keyframes fadeIn {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+  }

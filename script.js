@@ -22,7 +22,7 @@ const gameBoard = (() => {
 
     const add = (squareID, shape) => {
         const gameSquare = document.getElementById(squareID);
-        gameSquare.textContent = shape;
+        gameSquare.innerHTML = `<span class="fade-in">${shape}</span>`;
         const index = boardSetUp.indexOf(`${squareID}`)
         boardState[index] = shape;
     }
@@ -150,8 +150,6 @@ const game = (() => {
 
     function checkWinCondition() {
         let gameOver = false;
-        
-
 
         winCons.forEach(item => {
             let boxCount = 0;
@@ -161,9 +159,9 @@ const game = (() => {
                 boxLog.forEach(boxIndex => {
                     const divID = gameBoard.boardSetUp[boxIndex]
                     const currentDiv = document.getElementById(divID)
-                    currentDiv.style.backgroundColor = "#C0F7CB";
+                    currentDiv.style.backgroundColor = "#C0F79C";
                     currentDiv.addEventListener("mouseleave", function () {
-                        currentDiv.style.backgroundColor = "#C0F7CB";
+                        currentDiv.style.backgroundColor = "#C0F79C";
                     })
                 })
             }
@@ -357,8 +355,8 @@ const game = (() => {
                             checkWinCondition()
                             
                             if (currentPlayer === "player3") {
-                                computerPlay()
-                                checkWinCondition()
+                                setTimeout(computerPlay, 500)
+                                setTimeout(checkWinCondition, 600)
                             }
         
                         } else if (currentPlayer === "player2") {
