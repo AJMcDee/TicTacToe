@@ -95,5 +95,5 @@ const gameBoard = (() => {
         gameBoard,
     }
 
-
 })()
+
