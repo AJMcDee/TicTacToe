@@ -1,61 +1,87 @@
 <html>
-    <head>
-        <title>Tic Tac Toe!</title>
-        <link rel="stylesheet" href="style.css">
-        <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap" rel="stylesheet">
-    </head>
-    <body><div id="wrapper"><center>
+  <head>
+    <title>Tic Tac Toe!</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="wrapper">
+      <center>
         <h1>Tic Tac Toe</h1>
         <div id="gameboardContainer"></div>
         <div id="resultsdisplay"></div>
         <div id="newgamebuttondisplay"></div>
-        <div id="startgamebuttondisplay"><button id="startgame">Start Game</button></div>
+        <div id="startgamebuttondisplay">
+          <button id="startgame">Start Game</button>
+        </div>
         <div id="playerInformation">
-            <div id="player1" class="playerInfoClass">
-                <h4>Enter Player 1</h4>
-                <form id="player1entry" class="playerentryform">
-                    <p>Name:<br>
-                        <input id="player1name" type="text" size="10"></p>
-                    Colour: <select id="player1shapecolor">
-                        <option value="#000000">Black</option>
-                        <option value="#004777">Blue</option>
-                        <option value="#844C6E">Purple</option>
-                        <option value="#E55812">Orange</option>
-                        <option value="#306B34">Green</option>
-                        </select>
-                </form>
-                    <button id="submitplayer1" class="submitplayerbutton">Enter Game</button>
-            </div>
-            <div id="player2" class="playerInfoClass">
-                
-                <h4>Enter Player 2</h4>
-                
-                <form id="player2entry" class="playerentryform">
-                    <p>Name:<br> 
-                        <input id="player2name" type="text" size="10"></p>
-                    Colour: <select id="player2shapecolor">
-                        <option value="#000000">Black</option>
-                        <option value="#004777">Blue</option>
-                        <option value="#844C6E">Purple</option>
-                        <option value="#E55812">Orange</option>
-                        <option value="#306B34">Green</option>
-                        </select>
-                </form>
-                    <p><button id="submitplayer2" class="submitplayerbutton">Enter Game</button></p>
-                    <br>
-                    <hr>
-                    <h4>OR</h4>
-                    <p><button id="submitplayer3" class="submitplayerbutton">Play Against the Computer</button></p><br>
-               
+          <div id="player1" class="playerInfoClass">
+            <h2>Player 1</h2>
+            <form id="player1entry" class="playerentryform">
+              <label for="player1name">Name:</label>
 
-            </div>
+              <input id="player1name" name="player1name" type="text" />
+              <label for="player1shapecolor"> Colour:</label>
+              <select
+                id="player1shapecolor"
+                name="player1shapecolor"
+                height="16px"
+              >
+                <option value="#000000">Black</option>
+                <option value="#004777">Blue</option>
+                <option value="#844C6E">Purple</option>
+                <option value="#E55812">Orange</option>
+                <option value="#306B34">Green</option>
+              </select>
+            </form>
+            <button id="submitplayer1" class="submitplayerbutton">
+              Ready Player 1
+            </button>
+          </div>
+          <div id="player2" class="playerInfoClass">
+            <h2>Player 2</h2>
+
+            <form id="player2entry" class="playerentryform">
+              <label for="player2name">Name:</label>
+
+              <input id="player2name" name="player2name" type="text" />
+              <label for="player2shapecolor"> Colour:</label>
+              <select
+                id="player2shapecolor"
+                name="player2shapecolor"
+                height="16px"
+              >
+                <option value="#000000">Black</option>
+                <option value="#004777">Blue</option>
+                <option value="#844C6E">Purple</option>
+                <option value="#E55812">Orange</option>
+                <option value="#306B34">Green</option>
+              </select>
+            </form>
+            <p>
+              <button id="submitplayer2" class="submitplayerbutton">
+                Ready Player 2
+              </button>
+            </p>
+            <br />
+            <hr />
+            <h4>OR</h4>
+            <p>
+              <button id="submitplayer3" class="submitplayerbutton">
+                Play Against the Computer
+              </button>
+            </p>
+            <br />
+          </div>
         </div>
-        <div id="gameBoard">
-        </div>
+        <div id="gameBoard"></div>
         <script src="gameBoard.js"></script>
         <script src="playerSettings.js"></script>
         <script src="script.js"></script>
-       
-    </center></div></body>
+      </center>
+    </div>
+  </body>
 </html>
-
